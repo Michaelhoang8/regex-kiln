@@ -4,6 +4,10 @@ Compile a small regular-expression language into a Thompson NFA, replay the acti
 
 ![Regex Kiln state inspector](docs/workbench.png)
 
+## Interface
+
+Pattern and input editing sit beside a state inspector. Machine, Test corpus, and Transitions & files use separate views, while the complete-input verdict remains visible above them. Filled state buttons mark reachability, a circular state marks acceptance, and an outlined state is selected for inspection. The editor stacks above results on narrow screens.
+
 ## Run
 
 ```sh

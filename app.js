@@ -69,7 +69,8 @@ function run(input) {
 function render() {
   const { machine, result } = report,
     row = result.rows[step];
-  $("verdict").textContent = result.accepted ? "Accepted." : "Rejected.";
+  $("verdict").textContent = result.accepted ? "Accepted" : "Rejected";
+  $("verdict").dataset.accepted = String(result.accepted);
   $("states-count").textContent = machine.states.length;
   $("checks").textContent = result.checks.toLocaleString();
   $("maximum").textContent = result.maxActive;
@@ -231,3 +232,12 @@ $("file").onchange = async () => {
 };
 fill(example);
 run(example);
+
+for (const button of document.querySelectorAll("[data-view]"))
+  button.onclick = () => {
+    stop();
+    for (const tab of document.querySelectorAll("[data-view]"))
+      tab.setAttribute("aria-pressed", String(tab === button));
+    for (const name of ["machine", "corpus", "transitions"])
+      $(name + "-view").hidden = name !== button.dataset.view;
+  };

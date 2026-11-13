@@ -3,23 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Regex Kiln · Pattern mechanics</title>
+    <title>Regex Kiln</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
-      <strong>Regex Kiln</strong><span>PATTERN MECHANICS / 055</span
-      ><button id="export">Export evidence</button>
+      <h1>Regex Kiln</h1>
+      <button id="export">Export evidence</button>
     </header>
     <main>
-      <section class="intro">
-        <p>FROM EXPRESSION TO MACHINE</p>
-        <h1>Every possibility.<br />One character at a time.</h1>
-        <div class="intro-note">
-          A small, inspectable regular-expression engine.<br />Thompson
-          construction. No backtracking.
-        </div>
-      </section>
       <form id="study">
         <label class="full"
           >Pattern<input
@@ -42,7 +34,7 @@
               <option value="unicode">Unicode characters</option>
               <option value="chain">Optional-chain stress test</option>
             </select></label
-          ><button class="primary" type="submit">Compile &amp; match ↗</button>
+          ><button class="primary" type="submit">Compile &amp; match</button>
         </div>
       </form>
       <p id="message" role="status" aria-live="polite"></p>
@@ -55,44 +47,53 @@
         <div><span>EDGE CHECKS</span><strong id="checks"></strong></div>
         <div><span>MAXIMUM ACTIVE</span><strong id="maximum"></strong></div>
       </section>
-      <div class="transport">
-        <button id="back" aria-label="Previous character">←</button
-        ><button id="play">Play</button
-        ><button id="next" aria-label="Next character">→</button
-        ><input
-          id="step"
-          type="range"
-          min="0"
-          value="0"
-          aria-label="Consumed code points"
-        /><output id="position"></output>
-      </div>
-      <div class="trace-caption">
-        <p id="prefix"></p>
-        <p id="prefix-status"></p>
-      </div>
-      <section class="machine">
-        <div>
-          <div class="section-heading">
-            <h2>State field</h2>
-            <span>Lit states are reachable after this prefix</span>
-          </div>
-          <div id="states" class="state-grid"></div>
+      <nav aria-label="Inspection view">
+        <button data-view="machine" aria-pressed="true">Machine</button
+        ><button data-view="corpus" aria-pressed="false">Test corpus</button
+        ><button data-view="transitions" aria-pressed="false">
+          Transitions &amp; files
+        </button>
+      </nav>
+      <section id="machine-view">
+        <div class="transport">
+          <button id="back" aria-label="Previous character">←</button
+          ><button id="play">Play</button
+          ><button id="next" aria-label="Next character">→</button
+          ><input
+            id="step"
+            type="range"
+            min="0"
+            value="0"
+            aria-label="Consumed code points"
+          /><output id="position"></output>
         </div>
-        <aside>
-          <p class="eyebrow">INSPECT A STATE</p>
-          <h2 id="state-title"></h2>
-          <p id="state-role"></p>
-          <div id="edges"></div>
-          <p class="hint">
-            ε transitions consume no character. All reachable alternatives
-            advance together. Acceptance at a prefix does not imply acceptance
-            of the full input.
-          </p>
-        </aside>
+        <div class="trace-caption">
+          <p id="prefix"></p>
+          <p id="prefix-status"></p>
+        </div>
+        <section class="machine">
+          <div>
+            <div class="section-heading">
+              <h2>States</h2>
+              <span>Filled states are reachable at this prefix</span>
+            </div>
+            <div id="states" class="state-grid"></div>
+          </div>
+          <aside>
+            <p class="eyebrow">INSPECT A STATE</p>
+            <h2 id="state-title"></h2>
+            <p id="state-role"></p>
+            <div id="edges"></div>
+            <p class="hint">
+              ε transitions consume no character. All reachable alternatives
+              advance together. Acceptance at a prefix does not imply acceptance
+              of the full input.
+            </p>
+          </aside>
+        </section>
       </section>
-      <details>
-        <summary>Test corpus</summary>
+      <section id="corpus-view" hidden>
+        <h2>Test corpus</h2>
         <p class="hint">
           JSON array of strings; up to 50 cases and 5000 code points in total.
           Changes apply when you compile.
@@ -116,9 +117,9 @@
             <tbody id="case-results"></tbody>
           </table>
         </div>
-      </details>
-      <details>
-        <summary>Import, export &amp; transition table</summary>
+      </section>
+      <section id="transitions-view" hidden>
+        <h2>Transition table</h2>
         <div class="actions">
           <button id="save">Save study</button
           ><button id="open">Open study</button
@@ -137,7 +138,7 @@
             <tbody id="transitions"></tbody>
           </table>
         </div>
-      </details>
+      </section>
       <details>
         <summary>Syntax &amp; limits</summary>
         <p>
@@ -164,7 +165,6 @@
           maintained production regex library.
         </p>
       </details>
-      <footer>REGEX KILN <span>Expressions made visible.</span></footer>
     </main>
     <script type="module" src="app.js"></script>
   </body>
