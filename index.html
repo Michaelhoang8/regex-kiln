@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Regex Kiln · Pattern mechanics</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <strong>Regex Kiln</strong><span>PATTERN MECHANICS / 055</span
+      ><button id="export">Export evidence</button>
+    </header>
+    <main>
+      <section class="intro">
+        <p>FROM EXPRESSION TO MACHINE</p>
+        <h1>Every possibility.<br />One character at a time.</h1>
+        <div class="intro-note">
+          A small, inspectable regular-expression engine.<br />Thompson
+          construction. No backtracking.
+        </div>
+      </section>
+      <form id="study">
+        <label class="full"
+          >Pattern<input
+            id="pattern"
+            spellcheck="false"
+            autocomplete="off"
+            aria-describedby="syntax"
+        /></label>
+        <p id="syntax" class="full hint">
+          Full-string matching · literals, grouping, |, *, +, ?, classes and dot
+          · dot includes newline
+        </p>
+        <label
+          >Input text<textarea id="text" rows="3" spellcheck="false"></textarea>
+        </label>
+        <div class="run-panel">
+          <label
+            >Example<select id="preset">
+              <option value="default">Alternation & repetition</option>
+              <option value="unicode">Unicode characters</option>
+              <option value="chain">Optional-chain stress test</option>
+            </select></label
+          ><button class="primary" type="submit">Compile &amp; match ↗</button>
+        </div>
+      </form>
+      <p id="message" role="status" aria-live="polite"></p>
+      <section class="result">
+        <div>
+          <span>COMPLETE INPUT</span>
+          <h2 id="verdict"></h2>
+        </div>
+        <div><span>NFA STATES</span><strong id="states-count"></strong></div>
+        <div><span>EDGE CHECKS</span><strong id="checks"></strong></div>
+        <div><span>MAXIMUM ACTIVE</span><strong id="maximum"></strong></div>
+      </section>
+      <div class="transport">
+        <button id="back" aria-label="Previous character">←</button
+        ><button id="play">Play</button
+        ><button id="next" aria-label="Next character">→</button
+        ><input
+          id="step"
+          type="range"
+          min="0"
+          value="0"
+          aria-label="Consumed code points"
+        /><output id="position"></output>
+      </div>
+      <div class="trace-caption">
+        <p id="prefix"></p>
+        <p id="prefix-status"></p>
+      </div>
+      <section class="machine">
+        <div>
+          <div class="section-heading">
+            <h2>State field</h2>
+            <span>Lit states are reachable after this prefix</span>
+          </div>
+          <div id="states" class="state-grid"></div>
+        </div>
+        <aside>
+          <p class="eyebrow">INSPECT A STATE</p>
+          <h2 id="state-title"></h2>
+          <p id="state-role"></p>
+          <div id="edges"></div>
+          <p class="hint">
+            ε transitions consume no character. All reachable alternatives
+            advance together. Acceptance at a prefix does not imply acceptance
+            of the full input.
+          </p>
+        </aside>
+      </section>
+      <details>
+        <summary>Test corpus</summary>
+        <p class="hint">
+          JSON array of strings; up to 50 cases and 5000 code points in total.
+          Changes apply when you compile.
+        </p>
+        <textarea
+          id="cases"
+          rows="5"
+          spellcheck="false"
+          aria-label="Test corpus JSON"
+        ></textarea>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Input</th>
+                <th>Full match</th>
+                <th>Code points</th>
+                <th>Edge checks</th>
+              </tr>
+            </thead>
+            <tbody id="case-results"></tbody>
+          </table>
+        </div>
+      </details>
+      <details>
+        <summary>Import, export &amp; transition table</summary>
+        <div class="actions">
+          <button id="save">Save study</button
+          ><button id="open">Open study</button
+          ><button id="dot">Export DOT graph</button
+          ><input id="file" type="file" accept=".json" hidden />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>Predicate</th>
+                <th>To</th>
+              </tr>
+            </thead>
+            <tbody id="transitions"></tbody>
+          </table>
+        </div>
+      </details>
+      <details>
+        <summary>Syntax &amp; limits</summary>
+        <p>
+          Literals, parentheses, concatenation, alternation |, postfix * + ?,
+          character classes [a-z] and negated classes [^a-z] are supported. Dot
+          matches any Unicode code point, including newline. Escape punctuation
+          for literal operators; \n, \r and \t represent controls. Empty
+          patterns, groups and alternatives match the empty string.
+        </p>
+        <p>
+          No captures, backreferences, lookarounds, anchors, counted repetition,
+          shorthand classes, flags, lazy quantifiers or substring search.
+          Unsupported syntax is rejected. Patterns are limited to 256 code
+          points, group depth 32, automata to 1024 states and inspected input to
+          2000 code points. Unicode normalization and grapheme segmentation are
+          not performed.
+        </p>
+        <p>
+          Edge checks count closure edge inspections plus consuming-edge
+          predicate tests; they are not CPU timing or every internal operation.
+          Matching uses state sets with O(pattern size × input length) work.
+          Retaining the inspection trace also uses O(states × input length)
+          space. This is an educational engine, not a replacement for a
+          maintained production regex library.
+        </p>
+      </details>
+      <footer>REGEX KILN <span>Expressions made visible.</span></footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

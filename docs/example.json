@@ -1,0 +1,13 @@
+{
+  "pattern": "(ab|a)+c?",
+  "text": "abaabc",
+  "cases": [
+    "",
+    "a",
+    "ab",
+    "abaabc",
+    "abb",
+    "abaac",
+    "🙂"
+  ]
+}
